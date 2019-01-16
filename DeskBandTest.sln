@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.271
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsDeskBand", "WindowsDeskBand\WindowsDeskBand.csproj", "{BBA19F80-546F-415C-BE96-F98310A56EFA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFBand", "WPFBand\WPFBand.csproj", "{0B6381B3-F06A-4089-805C-2F9EDEC21ACB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BandTest", "BandTest\BandTest.csproj", "{5E7378AB-582C-4B4B-88B2-4CAD96839B39}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BBA19F80-546F-415C-BE96-F98310A56EFA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBA19F80-546F-415C-BE96-F98310A56EFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBA19F80-546F-415C-BE96-F98310A56EFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBA19F80-546F-415C-BE96-F98310A56EFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B6381B3-F06A-4089-805C-2F9EDEC21ACB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B6381B3-F06A-4089-805C-2F9EDEC21ACB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B6381B3-F06A-4089-805C-2F9EDEC21ACB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B6381B3-F06A-4089-805C-2F9EDEC21ACB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E7378AB-582C-4B4B-88B2-4CAD96839B39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E7378AB-582C-4B4B-88B2-4CAD96839B39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E7378AB-582C-4B4B-88B2-4CAD96839B39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E7378AB-582C-4B4B-88B2-4CAD96839B39}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8694BCC7-F84A-4E8C-8D01-EED0729624D9}
+	EndGlobalSection
+EndGlobal
