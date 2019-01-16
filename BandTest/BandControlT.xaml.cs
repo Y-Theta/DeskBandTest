@@ -23,7 +23,7 @@ namespace BandTest {
         }
 
         private void Action_Clicked(object sender, EventArgs e) {
-            
+            //TODO:Open your "Setting Window" to control deskband
         }
 
         public BandControlT() {
