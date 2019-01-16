@@ -68,22 +68,20 @@
     <None Include="test.snk" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DeskBand_usingLib\WindowsDeskBand.csproj">
-      <Project>{bba19f80-546f-415c-be96-f98310a56efa}</Project>
-      <Name>WindowsDeskBand</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\WPFBand\WPFBand.csproj">
-      <Project>{0b6381b3-f06a-4089-805c-2f9edec21acb}</Project>
-      <Name>WPFBand</Name>
-      <Private>False</Private>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Page Include="BandControlT.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WindowsDeskBand\WindowsDeskBand.csproj">
+      <Project>{bba19f80-546f-415c-be96-f98310a56efa}</Project>
+      <Name>WindowsDeskBand</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WPFBand\WPFBand.csproj">
+      <Project>{0b6381b3-f06a-4089-805c-2f9edec21acb}</Project>
+      <Name>WPFBand</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

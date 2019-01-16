@@ -64,13 +64,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DeskBand_usingLib\WindowsDeskBand.csproj">
+    <None Include="test.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WindowsDeskBand\WindowsDeskBand.csproj">
       <Project>{bba19f80-546f-415c-be96-f98310a56efa}</Project>
       <Name>WindowsDeskBand</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="test.snk" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
