@@ -6,7 +6,8 @@
                   VerticalAlignment="Stretch"
                   IsHitTestVisible="False">
     <!--此控件屏蔽了鼠标消息,只能通过菜单设置-->
-    <Border x:Name="rborder">
+    <Border x:Name="rborder"
+            IsHitTestVisible="False">
         <Grid Width="120"
               HorizontalAlignment="Center">
             <TextBlock x:Name="TextHolder"

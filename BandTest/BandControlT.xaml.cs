@@ -11,12 +11,12 @@ namespace BandTest {
     /// </summary>
     [ComVisible(true)]
     [Guid("eabd5a5b-4273-4fb8-a851-aa0d4b803534")]
-    [BandRegistration(Name = "DeskBandTest", ShowDeskBand = true)]
+    [BandRegistration(Name = "FlowBand", ShowDeskBand = true)]
     public partial class BandControlT : WBandControl {
 
         private List<DeskBandMenuItem> ContextMenuItems {
             get {
-                var action = new DeskBandMenuAction("Say Hello");
+                var action = new DeskBandMenuAction("流量监控设置");
                 action.Clicked += Action_Clicked;
                 return new List<DeskBandMenuItem>() { action };
             }
@@ -24,6 +24,8 @@ namespace BandTest {
 
         private void Action_Clicked(object sender, EventArgs e) {
             //TODO:Open your "Setting Window" to control deskband
+
+
         }
 
         public BandControlT() {

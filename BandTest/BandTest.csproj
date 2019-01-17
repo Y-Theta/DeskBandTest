@@ -32,10 +32,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>false</SignAssembly>
+    <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>test.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -57,15 +60,11 @@
     <Compile Include="BandControlT.xaml.cs">
       <DependentUpon>BandControlT.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BandTestMain.cs">
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <None Include="test.snk" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="BandControlT.xaml">
@@ -82,6 +81,9 @@
       <Project>{0b6381b3-f06a-4089-805c-2f9edec21acb}</Project>
       <Name>WPFBand</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="test.snk" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -168,11 +168,20 @@ namespace WindowsDeskBand.DeskBand.BandParts {
             ppvSite = _parentSite;
         }
 
+        public static RegistryKey GetClassRoot() {
+            RegistryKey localKey;
+            if (Environment.Is64BitOperatingSystem)
+                localKey = RegistryKey.OpenBaseKey(RegistryHive.ClassesRoot, RegistryView.Registry64);
+            else
+                localKey = RegistryKey.OpenBaseKey(RegistryHive.ClassesRoot, RegistryView.Registry32);
+            return localKey;
+        }
+
         [ComRegisterFunction]
         public static void Register(Type t) {
             var guid = t.GUID.ToString("B");
             try {
-                var registryKey = Registry.ClassesRoot.CreateSubKey($@"CLSID\{guid}");
+                var registryKey = GetClassRoot().CreateSubKey($@"CLSID\{guid}");
                 registryKey.SetValue(null, GetToolbarName(t));
 
                 var subKey = registryKey.CreateSubKey("Implemented Categories");
@@ -185,7 +194,7 @@ namespace WindowsDeskBand.DeskBand.BandParts {
                     ///https://www.pinvoke.net/default.aspx/Interfaces.ITrayDeskband
                     ITrayDeskband csdeskband = null;
                     try {
-                        Type trayDeskbandType = System.Type.GetTypeFromCLSID(new Guid("E6442437-6C68-4f52-94DD-2CFED267EFB9"));
+                        Type trayDeskbandType = Type.GetTypeFromCLSID(new Guid("E6442437-6C68-4f52-94DD-2CFED267EFB9"));
                         Guid deskbandGuid = t.GUID;
                         csdeskband = (ITrayDeskband)Activator.CreateInstance(trayDeskbandType);
                         if (csdeskband != null) {
@@ -221,7 +230,7 @@ namespace WindowsDeskBand.DeskBand.BandParts {
         public static void Unregister(Type t) {
             var guid = t.GUID.ToString("B");
             try {
-                Registry.ClassesRoot.OpenSubKey(@"CLSID", true)?.DeleteSubKeyTree(guid);
+                GetClassRoot().OpenSubKey(@"CLSID", true)?.DeleteSubKeyTree(guid);
 
                 Console.WriteLine($"Successfully unregistered deskband `{GetToolbarName(t)}` - GUID: {guid}");
             }
