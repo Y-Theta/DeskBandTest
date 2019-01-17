@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Windows;
 using WindowsDeskBand.DeskBand.BandParts;
 using WindowsDeskBand.DeskBand.BandParts.Menu;
 using WPFBand;
@@ -24,12 +25,13 @@ namespace BandTest {
 
         private void Action_Clicked(object sender, EventArgs e) {
             //TODO:Open your "Setting Window" to control deskband
-
+            MessageBox.Show("Setting");
 
         }
 
         public BandControlT() {
             InitializeComponent();
+            TextHolder.Text = "Hello";
             Options.MinHorizontalSize.Width = 120;
             Options.ContextMenuItems = ContextMenuItems;
         }

@@ -168,12 +168,13 @@ namespace WindowsDeskBand.DeskBand.BandParts {
             ppvSite = _parentSite;
         }
 
-        public static RegistryKey GetClassRoot() {
+        private static RegistryKey GetClassesRoot() {
             RegistryKey localKey;
             if (Environment.Is64BitOperatingSystem)
                 localKey = RegistryKey.OpenBaseKey(RegistryHive.ClassesRoot, RegistryView.Registry64);
             else
                 localKey = RegistryKey.OpenBaseKey(RegistryHive.ClassesRoot, RegistryView.Registry32);
+
             return localKey;
         }
 
@@ -181,7 +182,7 @@ namespace WindowsDeskBand.DeskBand.BandParts {
         public static void Register(Type t) {
             var guid = t.GUID.ToString("B");
             try {
-                var registryKey = GetClassRoot().CreateSubKey($@"CLSID\{guid}");
+                var registryKey = GetClassesRoot().CreateSubKey($@"CLSID\{guid}");
                 registryKey.SetValue(null, GetToolbarName(t));
 
                 var subKey = registryKey.CreateSubKey("Implemented Categories");
@@ -230,7 +231,7 @@ namespace WindowsDeskBand.DeskBand.BandParts {
         public static void Unregister(Type t) {
             var guid = t.GUID.ToString("B");
             try {
-                GetClassRoot().OpenSubKey(@"CLSID", true)?.DeleteSubKeyTree(guid);
+                GetClassesRoot().OpenSubKey(@"CLSID", true)?.DeleteSubKeyTree(guid);
 
                 Console.WriteLine($"Successfully unregistered deskband `{GetToolbarName(t)}` - GUID: {guid}");
             }

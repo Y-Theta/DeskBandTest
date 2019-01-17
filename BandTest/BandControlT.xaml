@@ -1,13 +1,8 @@
 ﻿<csb:WBandControl x:Class="BandTest.BandControlT"
                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                  xmlns:csb="clr-namespace:WPFBand;assembly=WPFBand"
-                  HorizontalAlignment="Stretch"
-                  VerticalAlignment="Stretch"
-                  IsHitTestVisible="False">
-    <!--此控件屏蔽了鼠标消息,只能通过菜单设置-->
-    <Border x:Name="rborder"
-            IsHitTestVisible="False">
+                  xmlns:csb="clr-namespace:WPFBand;assembly=WPFBand">
+    <Border x:Name="rborder">
         <Grid Width="120"
               HorizontalAlignment="Center">
             <TextBlock x:Name="TextHolder"
