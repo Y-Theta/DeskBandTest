@@ -131,8 +131,7 @@ namespace WindowsDeskBand.DeskBand.BandParts {
                 cbSize = Marshal.SizeOf<APPBARDATA>()
             };
             var res = Shell32.SHAppBarMessage(APPBARMESSAGE.ABM_GETTASKBARPOS, ref data);
-            if (!Convert.ToBoolean((int)res)) {
-            }
+            if (!Convert.ToBoolean((int)res)) {}
 
             var rect = data.rc;
             Size = new BandSize(rect.right - rect.left, rect.bottom - rect.top);

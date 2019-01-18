@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Windows;
+using System.Threading.Tasks;
+using System.Windows.Controls;
+using System.Windows.Threading;
 using WindowsDeskBand.DeskBand.BandParts;
 using WindowsDeskBand.DeskBand.BandParts.Menu;
 using WPFBand;
@@ -14,26 +16,21 @@ namespace BandTest {
     [Guid("eabd5a5b-4273-4fb8-a851-aa0d4b803534")]
     [BandRegistration(Name = "FlowBand", ShowDeskBand = true)]
     public partial class BandControlT : WBandControl {
-
-        private List<DeskBandMenuItem> ContextMenuItems {
-            get {
-                var action = new DeskBandMenuAction("流量监控设置");
-                action.Clicked += Action_Clicked;
-                return new List<DeskBandMenuItem>() { action };
-            }
-        }
-
-        private void Action_Clicked(object sender, EventArgs e) {
-            //TODO:Open your "Setting Window" to control deskband
-            MessageBox.Show("Setting");
-
-        }
+        private Dispatcher _uidispatcher;
 
         public BandControlT() {
-            InitializeComponent();
-            TextHolder.Text = "Hello";
             Options.MinHorizontalSize.Width = 120;
-            Options.ContextMenuItems = ContextMenuItems;
+            InitializeComponent();
+            _uidispatcher = Dispatcher.CurrentDispatcher;
+            InitAsync();
+        }
+
+        private async Task InitAsync() {
+            await Task.Run(() => {
+                _uidispatcher.Invoke(() => {
+                    TextHolder.Text = "Hello";
+                }, DispatcherPriority.Normal);
+            });
         }
     }
 }

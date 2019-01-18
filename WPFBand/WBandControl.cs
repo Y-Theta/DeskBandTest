@@ -182,14 +182,6 @@ namespace WPFBand {
             return _impl.GetBandInfo(dwBandID, dwViewMode, ref pdbi);
         }
 
-        int IDockingWindow.GetWindow(out IntPtr phwnd) {
-            return _impl.GetWindow(out phwnd);
-        }
-
-        int IDockingWindow.ContextSensitiveHelp(bool fEnterMode) {
-            return _impl.ContextSensitiveHelp(fEnterMode);
-        }
-
         int IDockingWindow.ShowDW(bool fShow) {
             return _impl.ShowDW(fShow);
         }
@@ -210,12 +202,12 @@ namespace WPFBand {
             return _impl.ContextSensitiveHelp(fEnterMode);
         }
 
-        void IObjectWithSite.SetSite(object pUnkSite) {
-            _impl.SetSite(pUnkSite);
+        int IObjectWithSite.SetSite(object pUnkSite) {
+            return _impl.SetSite(pUnkSite);
         }
 
-        void IObjectWithSite.GetSite(ref Guid riid, out object ppvSite) {
-            _impl.GetSite(ref riid, out ppvSite);
+        int IObjectWithSite.GetSite(ref Guid riid, out IntPtr ppvSite) {
+           return  _impl.GetSite(ref riid, out ppvSite);
         }
 
         int IContextMenu3.QueryContextMenu(IntPtr hMenu, uint indexMenu, uint idCmdFirst, uint idCmdLast, QueryContextMenuFlags uFlags) {
@@ -283,7 +275,7 @@ namespace WPFBand {
             return _impl.Load(pStm);
         }
 
-        int IPersistStream.Save(object pStm, bool fClearDirty) {
+        int IPersistStream.Save(IntPtr pStm, bool fClearDirty) {
             return _impl.Save(pStm, fClearDirty);
         }
 
@@ -292,8 +284,8 @@ namespace WPFBand {
             return HRESULT.S_OK;
         }
 
-        void IInputObject.UIActivateIO(int fActivate, ref MSG msg) {
-            _impl.UIActivateIO(fActivate, ref msg);
+        int IInputObject.UIActivateIO(bool fActivate, ref MSG msg) {
+           return _impl.UIActivateIO(fActivate, ref msg);
         }
 
         int IInputObject.HasFocusIO() {

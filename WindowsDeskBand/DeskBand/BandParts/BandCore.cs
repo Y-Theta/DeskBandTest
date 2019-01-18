@@ -146,7 +146,7 @@ namespace WindowsDeskBand.DeskBand.BandParts {
             return HRESULT.S_OK;
         }
 
-        public void SetSite([In, MarshalAs(UnmanagedType.IUnknown)] object pUnkSite) {
+        public int SetSite([In, MarshalAs(UnmanagedType.IUnknown)] object pUnkSite) {
             if (_parentSite != null) {
                 Marshal.ReleaseComObject(_parentSite);
             }
@@ -154,7 +154,7 @@ namespace WindowsDeskBand.DeskBand.BandParts {
             //pUnkSite null means deskband was closed
             if (pUnkSite == null) {
                 Closed?.Invoke(this, null);
-                return;
+                return HRESULT.E_FAIL;
             }
 
             var oleWindow = (IOleWindow)pUnkSite;
@@ -162,10 +162,12 @@ namespace WindowsDeskBand.DeskBand.BandParts {
             User32.SetParent(_handle, _parentWindowHandle);
 
             _parentSite = pUnkSite;
+            return HRESULT.S_OK;
         }
 
-        public void GetSite(ref Guid riid, [MarshalAs(UnmanagedType.IUnknown)] out object ppvSite) {
-            ppvSite = _parentSite;
+        public int GetSite(ref Guid riid, [MarshalAs(UnmanagedType.IUnknown)] out IntPtr ppvSite) {
+            ppvSite = (IntPtr)_parentSite;
+            return HRESULT.S_OK;
         }
 
         private static RegistryKey GetClassesRoot() {
@@ -182,7 +184,7 @@ namespace WindowsDeskBand.DeskBand.BandParts {
         public static void Register(Type t) {
             var guid = t.GUID.ToString("B");
             try {
-                var registryKey = GetClassesRoot().CreateSubKey($@"CLSID\{guid}");
+                var registryKey = Registry.ClassesRoot.CreateSubKey($@"CLSID\{guid}");
                 registryKey.SetValue(null, GetToolbarName(t));
 
                 var subKey = registryKey.CreateSubKey("Implemented Categories");
@@ -193,32 +195,7 @@ namespace WindowsDeskBand.DeskBand.BandParts {
                 if (GetToolbarRequestToShow(t)) {
                     Console.WriteLine($"Request to show deskband.");
                     ///https://www.pinvoke.net/default.aspx/Interfaces.ITrayDeskband
-                    ITrayDeskband csdeskband = null;
-                    try {
-                        Type trayDeskbandType = Type.GetTypeFromCLSID(new Guid("E6442437-6C68-4f52-94DD-2CFED267EFB9"));
-                        Guid deskbandGuid = t.GUID;
-                        csdeskband = (ITrayDeskband)Activator.CreateInstance(trayDeskbandType);
-                        if (csdeskband != null) {
-                            csdeskband.DeskBandRegistrationChanged();
-
-                            if (csdeskband.IsDeskBandShown(ref deskbandGuid) == HRESULT.S_FALSE) {
-                                if (csdeskband.ShowDeskBand(ref deskbandGuid) != HRESULT.S_OK) {
-                                    Console.WriteLine($"Error while trying to show deskband.");
-                                }
-                                if (csdeskband.DeskBandRegistrationChanged() == HRESULT.S_OK) {
-                                    Console.WriteLine($"The deskband was Succesfully shown with taskbar.{Environment.NewLine}You may see the alert notice box from explorer call.");
-                                }
-                            }
-                        }
-                    }
-                    catch (Exception e) {
-                        Console.WriteLine($"Error while trying to show deskband: {e.ToString()}");
-                    }
-                    finally {
-                        if (csdeskband != null && Marshal.IsComObject(csdeskband)) {
-                            Marshal.ReleaseComObject(csdeskband);
-                        }
-                    }
+                    BandOperate.ShowBand(t);
                 }
             }
             catch (Exception) {
@@ -231,7 +208,7 @@ namespace WindowsDeskBand.DeskBand.BandParts {
         public static void Unregister(Type t) {
             var guid = t.GUID.ToString("B");
             try {
-                GetClassesRoot().OpenSubKey(@"CLSID", true)?.DeleteSubKeyTree(guid);
+                Registry.ClassesRoot.OpenSubKey(@"CLSID", true)?.DeleteSubKeyTree(guid);
 
                 Console.WriteLine($"Successfully unregistered deskband `{GetToolbarName(t)}` - GUID: {guid}");
             }
@@ -328,7 +305,7 @@ namespace WindowsDeskBand.DeskBand.BandParts {
             return HRESULT.S_OK;
         }
 
-        public int Save(object pStm, bool fClearDirty) {
+        public int Save(IntPtr pStm, bool fClearDirty) {
             _isDirty = !fClearDirty;
             return HRESULT.S_OK;
         }
@@ -338,8 +315,10 @@ namespace WindowsDeskBand.DeskBand.BandParts {
             bandSite.RemoveBand(_id);
         }
 
-        public void UIActivateIO(int fActivate, ref MSG msg) {
+        public int UIActivateIO(bool fActivate, ref MSG msg) {
             //TODO
+
+            return HRESULT.S_OK;
         }
 
         public int HasFocusIO() {
