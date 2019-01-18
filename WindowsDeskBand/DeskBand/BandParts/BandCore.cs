@@ -21,12 +21,17 @@ namespace WindowsDeskBand.DeskBand.BandParts {
 
         private readonly IntPtr _handle;
         private IntPtr _parentWindowHandle;
-        private object _parentSite; // Has these interfaces: IInputObjectSite, IOleWindow, IOleCommandTarget, IBandSite
+        /// Has these interfaces: IInputObjectSite, IOleWindow, IOleCommandTarget, IBandSite
+        private object _parentSite; 
         private uint _id;
         private uint _menutStartId = 0;
         private bool _isDirty = true;
-        private Guid CGID_DeskBand = new Guid("EB0FE172-1A3A-11D0-89B3-00A0C90A90AC"); // Command group id for deskband. Used for IOleCommandTarge.Exec
+
+        /// Command group id for deskband. Used for IOleCommandTarge.Exec
+        private Guid CGID_DeskBand = new Guid("EB0FE172-1A3A-11D0-89B3-00A0C90A90AC"); 
+
         private readonly Dictionary<uint, DeskBandMenuAction> _contextMenuActions = new Dictionary<uint, DeskBandMenuAction>();
+
 
         public BandCore(IntPtr handle, BandOptions options) {
             _handle = handle;
@@ -70,6 +75,7 @@ namespace WindowsDeskBand.DeskBand.BandParts {
         }
 
         public int GetBandInfo(uint dwBandID, DESKBANDINFO.DBIF dwViewMode, ref DESKBANDINFO pdbi) {
+            /// this method is likely to set the bandsize which is called by system
             _id = dwBandID;
 
             // Sizing information is requested whenever the taskbar changes size/orientation
@@ -147,6 +153,7 @@ namespace WindowsDeskBand.DeskBand.BandParts {
         }
 
         public int SetSite([In, MarshalAs(UnmanagedType.IUnknown)] object pUnkSite) {
+            ///this method is called when the deskband is open
             if (_parentSite != null) {
                 Marshal.ReleaseComObject(_parentSite);
             }
@@ -154,20 +161,36 @@ namespace WindowsDeskBand.DeskBand.BandParts {
             //pUnkSite null means deskband was closed
             if (pUnkSite == null) {
                 Closed?.Invoke(this, null);
-                return HRESULT.E_FAIL;
+                return HRESULT.S_OK;
             }
 
-            var oleWindow = (IOleWindow)pUnkSite;
-            oleWindow.GetWindow(out _parentWindowHandle);
-            User32.SetParent(_handle, _parentWindowHandle);
+            try {
+                var oleWindow = (IOleWindow)pUnkSite;
+                if (oleWindow.GetWindow(out _parentWindowHandle) != HRESULT.S_OK) {
+                    return HRESULT.E_FAIL;
+                }
+                User32.SetParent(_handle, _parentWindowHandle);
+            }
+            catch {
+                return HRESULT.E_FAIL;
+            }
 
             _parentSite = pUnkSite;
             return HRESULT.S_OK;
         }
 
-        public int GetSite(ref Guid riid, [MarshalAs(UnmanagedType.IUnknown)] out IntPtr ppvSite) {
-            ppvSite = (IntPtr)_parentSite;
-            return HRESULT.S_OK;
+        public int GetSite(ref Guid riid, out IntPtr ppvSite) {
+
+            if(_parentSite is null) {
+                ppvSite = IntPtr.Zero;
+                return HRESULT.E_FAIL;
+            }
+
+            var pUnknown = Marshal.GetIUnknownForObject(_parentSite);
+            var result = Marshal.QueryInterface(pUnknown, ref riid, out ppvSite);
+            Marshal.Release(pUnknown);
+
+            return result;
         }
 
         private static RegistryKey GetClassesRoot() {
@@ -178,47 +201,6 @@ namespace WindowsDeskBand.DeskBand.BandParts {
                 localKey = RegistryKey.OpenBaseKey(RegistryHive.ClassesRoot, RegistryView.Registry32);
 
             return localKey;
-        }
-
-        [ComRegisterFunction]
-        public static void Register(Type t) {
-            var guid = t.GUID.ToString("B");
-            try {
-                var registryKey = Registry.ClassesRoot.CreateSubKey($@"CLSID\{guid}");
-                registryKey.SetValue(null, GetToolbarName(t));
-
-                var subKey = registryKey.CreateSubKey("Implemented Categories");
-                subKey.CreateSubKey(ComponentCategoryManager.CATID_DESKBAND.ToString("B"));
-
-                Console.WriteLine($"Succesfully registered deskband `{GetToolbarName(t)}` - GUID: {guid}");
-
-                if (GetToolbarRequestToShow(t)) {
-                    Console.WriteLine($"Request to show deskband.");
-                    ///https://www.pinvoke.net/default.aspx/Interfaces.ITrayDeskband
-                    BandOperate.ShowBand(t);
-                }
-            }
-            catch (Exception) {
-                Console.Error.WriteLine($"Failed to register deskband `{GetToolbarName(t)}` - GUID: {guid}");
-                throw;
-            }
-        }
-
-        [ComUnregisterFunction]
-        public static void Unregister(Type t) {
-            var guid = t.GUID.ToString("B");
-            try {
-                Registry.ClassesRoot.OpenSubKey(@"CLSID", true)?.DeleteSubKeyTree(guid);
-
-                Console.WriteLine($"Successfully unregistered deskband `{GetToolbarName(t)}` - GUID: {guid}");
-            }
-            catch (ArgumentException) {
-                Console.Error.WriteLine($"Deskband `{GetToolbarName(t)}` is not registered");
-            }
-            catch (Exception) {
-                Console.Error.WriteLine($"Failed to unregister deskband `{GetToolbarName(t)}` - GUID: {guid}");
-                throw;
-            }
         }
 
         internal static string GetToolbarName(Type t) {
@@ -245,16 +227,16 @@ namespace WindowsDeskBand.DeskBand.BandParts {
         public int InvokeCommand(IntPtr pici) {
 
             var commandInfo = Marshal.PtrToStructure<CMINVOKECOMMANDINFO>(pici);
-            var isUnicode = false;
-            var isExtended = false;
+            //var isUnicode = false;
+            //var isExtended = false;
             var verbPtr = commandInfo.lpVerb;
 
             if (commandInfo.cbSize == Marshal.SizeOf<CMINVOKECOMMANDINFOEX>()) {
-                isExtended = true;
+                //isExtended = true;
 
                 var extended = Marshal.PtrToStructure<CMINVOKECOMMANDINFOEX>(pici);
                 if (extended.fMask.HasFlag(CMINVOKECOMMANDINFOEX.CMIC.CMIC_MASK_UNICODE)) {
-                    isUnicode = true;
+                    // isUnicode = true;
                     verbPtr = extended.lpVerbW;
                 }
             }
@@ -316,8 +298,6 @@ namespace WindowsDeskBand.DeskBand.BandParts {
         }
 
         public int UIActivateIO(bool fActivate, ref MSG msg) {
-            //TODO
-
             return HRESULT.S_OK;
         }
 
@@ -328,5 +308,51 @@ namespace WindowsDeskBand.DeskBand.BandParts {
         public int TranslateAcceleratorIO(ref MSG msg) {
             return HRESULT.E_NOTIMPL;
         }
+
+        #region Register
+        /// <summary>
+        /// Register DeskBand so that it can show in taskbar
+        /// </summary>
+        [ComRegisterFunction]
+        public static void Register(Type t) {
+            var guid = t.GUID.ToString("B");
+            try {
+                var registryKey = Registry.ClassesRoot.CreateSubKey($@"CLSID\{guid}");
+                registryKey.SetValue(null, GetToolbarName(t));
+
+                var subKey = registryKey.CreateSubKey("Implemented Categories");
+                subKey.CreateSubKey(ComponentCategoryManager.CATID_DESKBAND.ToString("B"));
+
+                Console.WriteLine($"Succesfully registered deskband `{GetToolbarName(t)}` - GUID: {guid}");
+
+                if (GetToolbarRequestToShow(t)) {
+                    Console.WriteLine($"Request to show deskband.");
+                    ///https://www.pinvoke.net/default.aspx/Interfaces.ITrayDeskband
+                    BandOperate.ShowBand(t);
+                }
+            }
+            catch (Exception) {
+                Console.Error.WriteLine($"Failed to register deskband `{GetToolbarName(t)}` - GUID: {guid}");
+                throw;
+            }
+        }
+
+        [ComUnregisterFunction]
+        public static void Unregister(Type t) {
+            var guid = t.GUID.ToString("B");
+            try {
+                Registry.ClassesRoot.OpenSubKey(@"CLSID", true)?.DeleteSubKeyTree(guid);
+
+                Console.WriteLine($"Successfully unregistered deskband `{GetToolbarName(t)}` - GUID: {guid}");
+            }
+            catch (ArgumentException) {
+                Console.Error.WriteLine($"Deskband `{GetToolbarName(t)}` is not registered");
+            }
+            catch (Exception) {
+                Console.Error.WriteLine($"Failed to unregister deskband `{GetToolbarName(t)}` - GUID: {guid}");
+                throw;
+            }
+        }
+        #endregion
     }
 }

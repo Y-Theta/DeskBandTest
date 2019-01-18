@@ -71,7 +71,7 @@ namespace WPFBand {
 
                 _deskbandGuid = new Guid(GetType().GetCustomAttribute<GuidAttribute>(true)?.Value ?? Guid.Empty.ToString("B"));
             }
-            catch (Exception e) {
+            catch {
                 throw;
             }
         }
@@ -207,7 +207,7 @@ namespace WPFBand {
         }
 
         int IObjectWithSite.GetSite(ref Guid riid, out IntPtr ppvSite) {
-           return  _impl.GetSite(ref riid, out ppvSite);
+            return _impl.GetSite(ref riid, out ppvSite);
         }
 
         int IContextMenu3.QueryContextMenu(IntPtr hMenu, uint indexMenu, uint idCmdFirst, uint idCmdLast, QueryContextMenuFlags uFlags) {
@@ -285,7 +285,9 @@ namespace WPFBand {
         }
 
         int IInputObject.UIActivateIO(bool fActivate, ref MSG msg) {
-           return _impl.UIActivateIO(fActivate, ref msg);
+            if (fActivate)
+                _host.Focus();
+            return _impl.UIActivateIO(fActivate, ref msg);
         }
 
         int IInputObject.HasFocusIO() {

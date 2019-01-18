@@ -13,8 +13,6 @@ using WindowsDeskBand.DeskBand.Interop.Struct;
 
 namespace WindowsDeskBand {
     public class BandOperate {
-        #region Properties
-        #endregion
 
         #region Methods
         [SecurityCritical()]
@@ -36,7 +34,7 @@ namespace WindowsDeskBand {
             }
             finally {
                 if (csdeskband != null && Marshal.IsComObject(csdeskband)) {
-                   // Marshal.ReleaseComObject(csdeskband);
+                    Marshal.ReleaseComObject(csdeskband);
                 }
             }
         }
@@ -60,13 +58,10 @@ namespace WindowsDeskBand {
             }
             finally {
                 if (csdeskband != null && Marshal.IsComObject(csdeskband)) {
-                  //  Marshal.ReleaseComObject(csdeskband);
+                    Marshal.ReleaseComObject(csdeskband);
                 }
             }
         }
-        #endregion
-
-        #region Constructors
         #endregion
     }
 }
