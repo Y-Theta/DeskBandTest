@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using System.Windows.Controls;
 using System.Windows.Threading;
 using WindowsDeskBand.DeskBand.BandParts;
 using WindowsDeskBand.DeskBand.BandParts.Menu;
@@ -15,7 +14,7 @@ namespace BandTest {
     [ComVisible(true)]
     [Guid("eabd5a5b-4273-4fb8-a851-aa0d4b803534")]
     [BandRegistration(Name = "FlowBand", ShowDeskBand = true)]
-    public partial class BandControlT : WBandControl {
+    public partial class BandControlT : WPFBandControl {
         private Dispatcher _uidispatcher;
 
         private List<DeskBandMenuItem> _menu {
@@ -42,13 +41,14 @@ namespace BandTest {
             await Task.Run(() => {
                 _uidispatcher.Invoke(() => {
                     TextHolder.Text = "Hello";
+                    
                 }, DispatcherPriority.Normal);
             });
         }
 
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e) {
             Random rand = new Random();
-            TextHolder.Text = rand.Next(1, 10).ToString() ;
+            TextHolder.Text = rand.Next(1, 10).ToString();
         }
     }
 }

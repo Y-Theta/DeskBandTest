@@ -23,7 +23,7 @@ namespace WPFBand {
                 Child = control,
                 AutoSize = true,
                 Dock = DockStyle.Fill, //This is required or else it will crash
-                BackColorTransparent = true
+                BackColorTransparent = true,
             };
 
             Controls.Add(_host);

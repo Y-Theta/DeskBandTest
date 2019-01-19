@@ -1,8 +1,7 @@
-﻿<db:WBandControl x:Class="BandTest.BandControlT"
-                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                 xmlns:db="clr-namespace:WPFBand;assembly=WPFBand"
-                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                 IsHitTestVisible="False">
+﻿<db:WPFBandControl x:Class="BandTest.BandControlT"
+                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                   xmlns:db="clr-namespace:WPFBand;assembly=WPFBand"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Border x:Name="rborder">
         <Grid MinWidth="120"
               Width="120"
@@ -21,4 +20,4 @@
                     Width="32">OK</Button>
         </Grid>
     </Border>
-</db:WBandControl>
+</db:WPFBandControl>

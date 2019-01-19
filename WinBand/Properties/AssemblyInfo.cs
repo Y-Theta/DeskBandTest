@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // 有关程序集的一般信息由以下
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("WindowsDeskBand")]
+[assembly: AssemblyTitle("WinBand")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("WindowsDeskBand")]
+[assembly: AssemblyProduct("WinBand")]
 [assembly: AssemblyCopyright("Copyright ©  2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // 如果此项目向 COM 公开，则下列 GUID 用于类型库的 ID
-[assembly: Guid("bba19f80-546f-415c-be96-f98310a56efa")]
+[assembly: Guid("57d95434-e189-49a0-b854-da1d3e17f127")]
 
 // 程序集的版本信息由下列四个值组成: 
 //
@@ -34,6 +34,3 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
-[assembly: InternalsVisibleTo("WPFBand, PublicKey=0024000004800000940000000602000000240000525341310004000001000100796c5f1063065b93c35ceb1862f71745673252d3f947bdbb10330d4ffbd455557268bcd03527ff44c80948fbce8558323ee09151f6e1ed0fd5f63798992235dd9686ab1ceeb0c1611e8f244531fcc2ed4995cdec5b92fe7f87daf341a01e699f4cec99b4bfd486c60ddadebb8fdec5c7691011badcf7cc9e7d9ca777507155e3")]
-[assembly: InternalsVisibleTo("WinBand, PublicKey=0024000004800000940000000602000000240000525341310004000001000100796c5f1063065b93c35ceb1862f71745673252d3f947bdbb10330d4ffbd455557268bcd03527ff44c80948fbce8558323ee09151f6e1ed0fd5f63798992235dd9686ab1ceeb0c1611e8f244531fcc2ed4995cdec5b92fe7f87daf341a01e699f4cec99b4bfd486c60ddadebb8fdec5c7691011badcf7cc9e7d9ca777507155e3")]
-//[assembly: InternalsVisibleTo("")]

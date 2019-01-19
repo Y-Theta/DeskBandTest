@@ -1,74 +1,51 @@
-﻿using System;
-using System.ComponentModel;
+﻿///------------------------------------------------------------------------------
+/// @ Y_Theta
+///------------------------------------------------------------------------------
+using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Windows;
-using System.Windows.Media;
+using System.Windows.Forms;
 using WindowsDeskBand.DeskBand;
 using WindowsDeskBand.DeskBand.BandParts;
 using WindowsDeskBand.DeskBand.Interop.COM;
 using WindowsDeskBand.DeskBand.Interop.Struct;
-using UserControl = System.Windows.Controls.UserControl;
 
-namespace WPFBand {
-    public class WBandControl : UserControl, IDeskBandCore {
+namespace WinBand {
+    /// <summary>
+    /// Winforms implementation of <see cref="IDeskBandCore"/>. The deskband should inherit this class.
+    /// The deskband should also have these attributes <see cref="ComVisibleAttribute"/>, <see cref="GuidAttribute"/>, <see cref="BandRegistrationAttribute"/>.
+    /// </summary>
+    public class WinBandControl : UserControl, IDeskBandCore {
         /// <summary>
         /// Options for this deskband.
         /// </summary>
         /// <seealso cref="CSDeskBandOptions"/>
-        public BandOptions Options { get; } = new BandOptions();
+        protected BandOptions Options { get; } = new BandOptions();
 
         /// <summary>
         /// Get the current taskbar information.
         /// </summary>
         /// <seealso cref="TaskbarInfo"/>
-        public TaskbarInfo TaskbarInfo { get; }
+        protected TaskbarInfo TaskbarInfo { get; }
 
-        /// <summary>
-        /// Determines if transparency is enabled. Note this is color key transparency.
-        /// Use <see cref="TransparencyColorKey"/> so set the color key.
-        /// </summary>
-        public bool TransparencyEnabled {
-            get => _host.AllowTransparency;
-            set => _host.AllowTransparency = value;
-        }
-
-        /// <summary>
-        /// Color to be used for transparency.
-        /// </summary>
-        public Color TransparencyColorKey {
-            get => _host.TransparencyKey.ToColor();
-            set {
-                _host.TransparencyKey = value.ToColor();
-                _host.BackColor = value.ToColor();
-            }
-        }
-
-        private readonly BandHost _host;
         private readonly BandCore _impl;
         private readonly Guid _deskbandGuid;
 
         /// <summary>
-        /// Initializes a new instance of <see cref="CSDeskBandWpf"/>.
+        /// Initializes a new instance of <see cref="WinBandControl"/>.
         /// </summary>
-        public WBandControl() {
+        public WinBandControl() {
             try {
                 Options.Title = BandCore.GetToolbarName(GetType());
 
-                if (DesignerProperties.GetIsInDesignMode(this)) {
-                    _impl = new BandCore(IntPtr.Zero, Options);
-                }
-                else {
-                    _host = new BandHost(this);
-                    _impl = new BandCore(_host.Handle, Options);
-                }
-
+                _impl = new BandCore(Handle, Options);
                 _impl.VisibilityChanged += VisibilityChanged;
                 _impl.Closed += OnClose;
 
                 TaskbarInfo = _impl.TaskbarInfo;
-                SizeChanged += CSDeskBandWpf_SizeChanged;
+                SizeChanged += CSDeskBandWin_SizeChanged;
 
+                //Empty guid is a workaround for winforms designer because there will be no guid attribute
                 _deskbandGuid = new Guid(GetType().GetCustomAttribute<GuidAttribute>(true)?.Value ?? Guid.Empty.ToString("B"));
             }
             catch {
@@ -76,12 +53,12 @@ namespace WPFBand {
             }
         }
 
-        private void CSDeskBandWpf_SizeChanged(object sender, SizeChangedEventArgs e) {
+        private void CSDeskBandWin_SizeChanged(object sender, EventArgs e) {
             if (TaskbarInfo.Orientation == TaskbarOrientation.Horizontal) {
-                Options.HorizontalSize = new System.Windows.Size(ActualWidth, ActualHeight);
+                Options.HorizontalSize = Size;
             }
             else {
-                Options.VerticalSize = new System.Windows.Size(ActualWidth, ActualHeight);
+                Options.VerticalSize = Size;
             }
         }
 
@@ -89,21 +66,24 @@ namespace WPFBand {
             OnClose();
         }
 
-        private void VisibilityChanged(object sender, VisibilityChangedEventArgs visibilityChangedEventArgs) {
-            VisibilityChanged(visibilityChangedEventArgs.IsVisible);
-        }
-
         /// <summary>
         /// Method is called when deskband is being closed.
         /// </summary>
         protected virtual void OnClose() { }
 
-        /// <summary>
-        /// Method is called when deskband visibility has changed.
-        /// </summary>
-        protected virtual void VisibilityChanged(bool visible) {
-            Visibility = visible ? Visibility.Visible : Visibility.Hidden;
+        private void VisibilityChanged(object sender, VisibilityChangedEventArgs visibilityChangedEventArgs) {
+            VisibilityChanged(visibilityChangedEventArgs.IsVisible);
         }
+
+        protected virtual void VisibilityChanged(bool visible) {
+            if (visible) {
+                Show();
+            }
+            else {
+                Hide();
+            }
+        }
+
 
         /// <summary>
         /// Close the deskband.
@@ -285,8 +265,6 @@ namespace WPFBand {
         }
 
         int IInputObject.UIActivateIO(bool fActivate, ref MSG msg) {
-            if (fActivate)
-                _host.Focus();
             return _impl.UIActivateIO(fActivate, ref msg);
         }
 
@@ -296,6 +274,17 @@ namespace WPFBand {
 
         int IInputObject.TranslateAcceleratorIO(ref MSG msg) {
             return _impl.TranslateAcceleratorIO(ref msg);
+        }
+
+        private void InitializeComponent() {
+            this.SuspendLayout();
+            // 
+            // WinBandControl
+            // 
+            this.Name = "WinBandControl";
+            this.Size = new System.Drawing.Size(238, 60);
+            this.ResumeLayout(false);
+
         }
     }
 }
