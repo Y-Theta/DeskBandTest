@@ -275,16 +275,5 @@ namespace WinBand {
         int IInputObject.TranslateAcceleratorIO(ref MSG msg) {
             return _impl.TranslateAcceleratorIO(ref msg);
         }
-
-        private void InitializeComponent() {
-            this.SuspendLayout();
-            // 
-            // WinBandControl
-            // 
-            this.Name = "WinBandControl";
-            this.Size = new System.Drawing.Size(238, 60);
-            this.ResumeLayout(false);
-
-        }
     }
 }

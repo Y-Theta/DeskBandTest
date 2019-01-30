@@ -18,7 +18,7 @@ namespace BandTest_WinForm_ {
         /// 使用代码编辑器修改此方法的内容。
         /// </summary>
         private void InitializeComponent() {
-            _label1 = new Label();
+            this._label1 = new Label();
             this.SuspendLayout();
             // 
             // label1
@@ -27,9 +27,11 @@ namespace BandTest_WinForm_ {
             this._label1.ForeColor = System.Drawing.Color.White;
             this._label1.Location = new System.Drawing.Point(0, 0);
             this._label1.Name = "label1";
-            this._label1.Size = new System.Drawing.Size(200, 40);
+            this._label1.Size = new System.Drawing.Size(120, 40);
             this._label1.TabIndex = 0;
-            this._label1.Text = "No Title";
+            this._label1.Text = "Hello";
+            this._label1.AutoEllipsis = true;
+            this._label1.AutoSize = false;
             this._label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // BandControlT

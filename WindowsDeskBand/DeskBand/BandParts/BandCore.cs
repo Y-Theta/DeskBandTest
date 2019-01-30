@@ -160,7 +160,7 @@ namespace WindowsDeskBand.DeskBand.BandParts {
 
             //pUnkSite null means deskband was closed
             if (pUnkSite == null) {
-                Closed?.Invoke(this, null);
+               // Closed?.Invoke(this, null);
                 return HRESULT.S_OK;
             }
 
