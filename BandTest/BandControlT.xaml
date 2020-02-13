@@ -10,14 +10,11 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="auto" />
             </Grid.ColumnDefinitions>
-            <TextBlock x:Name="TextHolder"
-                       Foreground="White"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"
-                       FontSize="14" />
             <Button Click="Button_Click"
+                    FontFamily="Segoe MDL2 Assets"
                     Grid.Column="1"
-                    Width="32">OK</Button>
+                    Content="&#xE7E8;"
+                    Width="32" /> 
         </Grid>
     </Border>
 </db:WPFBandControl>

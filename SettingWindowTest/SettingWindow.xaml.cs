@@ -1,5 +1,4 @@
-﻿using BandTest_WinForm_;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +11,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using WindowsDeskBand;
 
 namespace SettingWindowTest {
     /// <summary>
@@ -33,11 +31,10 @@ namespace SettingWindowTest {
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e) {
-            BandOperate.ShowBand(typeof(BandControlT));
+            
         }
 
         private void Button_Click_2(object sender, RoutedEventArgs e) {
-            BandOperate.HideBand(typeof(BandControlT));
 
         }
     }
