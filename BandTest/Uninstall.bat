@@ -8,4 +8,6 @@
 taskkill /f /im "explorer.exe"
 start explorer.exe
 
+explorer "D:\Program\Visual C#\C#_WIN_DeskTop\DeskBandTest\Test"
+
 Pause

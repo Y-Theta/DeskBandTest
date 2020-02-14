@@ -10,10 +10,12 @@ using System.Windows;
 
 namespace SettingWindowTest {
     public class APP {
+
+        [STAThread]
         static void Main(string[] args) {
             SettingWindow main = new SettingWindow();
             main.ShowInTaskbar = false;
-            main.Show();
+            main.ShowDialog();
         }
     }
 }

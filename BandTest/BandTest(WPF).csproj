@@ -43,6 +43,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -65,6 +66,7 @@
     <Compile Include="BandControlT.xaml.cs">
       <DependentUpon>BandControlT.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Setting.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -93,6 +95,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="setting.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Install.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
