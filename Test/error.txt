@@ -1,3 +1,0 @@
-输入字符串的格式不正确。   在 System.Number.StringToNumber(String str, NumberStyles options, NumberBuffer& number, NumberFormatInfo info, Boolean parseDecimal)
-   在 System.Number.ParseInt32(String s, NumberStyles style, NumberFormatInfo info)
-   在 BandTest.BandControlT.Button_Click(Object sender, RoutedEventArgs e)

@@ -80,11 +80,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SettingWindowTest\SettingWindowTest.csproj">
-      <Project>{a42b1273-dd7a-4047-8dc8-eced7dffdd01}</Project>
-      <Name>SettingWindowTest</Name>
-      <Private>True</Private>
-    </ProjectReference>
     <ProjectReference Include="..\WindowsDeskBand\WindowsDeskBand.csproj">
       <Project>{bba19f80-546f-415c-be96-f98310a56efa}</Project>
       <Name>WindowsDeskBand</Name>

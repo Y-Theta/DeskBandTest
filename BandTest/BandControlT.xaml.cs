@@ -22,7 +22,7 @@ namespace BandTest {
     /// </summary>
     [ComVisible(true)]
     [Guid("eabd5a5b-4273-4fb8-a851-aa0d4b803534")]
-    [BandRegistration(Name = "FlowBand", ShowDeskBand = true)]
+    [BandRegistration(Name = "CloseMonitor", ShowDeskBand = true)]
     public partial class BandControlT : WPFBandControl {
 
         #region interop
@@ -47,6 +47,16 @@ namespace BandTest {
         public static readonly DependencyProperty TimeRingProperty =
             DependencyProperty.Register("TimeRing", typeof(Geometry),
                 typeof(BandControlT), new PropertyMetadata(null));
+
+        public bool IsEnable {
+            get { return (bool)GetValue(IsEnableProperty); }
+            set { SetValue(IsEnableProperty, value); }
+        }
+        public static readonly DependencyProperty IsEnableProperty =
+            DependencyProperty.Register("IsEnable", typeof(bool), 
+                typeof(BandControlT), new PropertyMetadata(true));
+
+
 
         private List<DeskBandMenuItem> _menu {
             get {
@@ -94,10 +104,13 @@ namespace BandTest {
 
 
         private void _timer_Elapsed(object sender, ElapsedEventArgs e) {
-            if (_delay == 0) {
+            if (_delay <= 0) {
                 SendMessage((IntPtr)HWND_BROADCAST, WM_SYSCOMMAND, (IntPtr)SC_MONITORPOWER, (IntPtr)2);
                 _delay = _delayori;
                 _timer.Stop();
+                _uidispatcher.Invoke(() => {
+                    IsEnable = true;
+                });
                 return;
             }
             _delay--;
@@ -107,11 +120,15 @@ namespace BandTest {
         }
 
         private void Button_Click(object sender, RoutedEventArgs e) {
+            if (!IsEnable)
+                return;
             try {
+                IsEnable = false;
                 string delay = Setting.Read("config", "TimeDelay", "1500", _settingfile);
                 //File.WriteAllText(_path + "data.txt", _settingfile + "\n" + File.ReadAllText(_settingfile) + "\n" + delay  + "\n" + timestamp + "  -  " + DateTime.Now.ToString());
                 _delay = _delayori = int.Parse(delay) / 50;
             } catch (Exception ex) {
+                IsEnable = true;
                 _delay = _delayori = 30;
                 File.WriteAllText(_path + "error.txt", ex.Message + ex.StackTrace);
             }
@@ -121,7 +138,7 @@ namespace BandTest {
         }
 
         public BandControlT() {
-            Options.MinHorizontalSize.Width = 32;
+            Options.MinHorizontalSize.Width = 24;
             Options.ContextMenuItems = _menu;
             InitializeComponent();
             InitAsync();
@@ -142,7 +159,8 @@ namespace BandTest {
             string path = cb.Replace(cb.Split('/').Last(), "");
             _path = path.Replace(path.Split('/').First() + "///", "");
             _settingfile = _path + "setting.ini";
-            Setting.Write("config", "TimeDelay", "1500", _settingfile);
+            if (Setting.Read("config", "TimeDelay", "-1", _settingfile).Equals("-1"))
+                Setting.Write("config", "TimeDelay", "1500", _settingfile);
         }
 
         private async void InitAsync() {

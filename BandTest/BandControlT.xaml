@@ -33,6 +33,7 @@
                 SnapsToDevicePixels="True"
                 UseLayoutRounding="True"
                 FontSize="16"
+                IsEnabled="{Binding IsEnable, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=db:WPFBandControl}}"
                 Foreground="{StaticResource BtnFgN}"
                 ToolTip="关闭屏幕"
                 Content="&#xE7E8;"
