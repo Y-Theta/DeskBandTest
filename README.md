@@ -1,7 +1,7 @@
 # DeskBandTest
 A Simple Deskband
 
-- add a monitor power
+- add a monitor power button
 
 a simplify to "[dsafa/CSDeskBand](https://github.com/dsafa/CSDeskBand)"
 
